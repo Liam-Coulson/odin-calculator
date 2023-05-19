@@ -1,0 +1,35 @@
+* {
+    font-family: "Arial", "Verdana", sans-serif;
+}
+
+#stackLayout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#header {
+    background-color: cornflowerblue;
+}
+
+#footer {
+    background-color: bisque;
+}
+
+.header {
+    /* Header CLASS, applies to footer too */
+    display: flex;
+    align-self: stretch;
+    justify-content: space-around;
+    color: darkblue;
+    font-weight: bold;
+    padding: 16px;
+}
+
+html {
+    background-color: beige;
+}
+
+body {
+    margin: 0;
+}

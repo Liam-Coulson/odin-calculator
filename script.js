@@ -1,6 +1,7 @@
 const calculatorDisplay = document.getElementById("calculatorDisplay");
 const calculatorInputs = document.getElementById("calculatorInputs");
-const calculatorButtons = document.getElementsByClassName("calcBtn");
+const calculatorNumbers = document.getElementsByClassName("calcNum");
+const calculatorOperations = document.getElementsByClassName("calcOp");
 const calculatorEquals = document.getElementById("calcEquals");
 const calculatorDel = document.getElementById("calcDel");
 const ERROR = "ERROR";
@@ -29,12 +30,22 @@ var calcDisplayQueue = [];
 
 // Events
 
-Array.from(calculatorButtons).forEach(btn => {
+Array.from(calculatorNumbers).forEach(btn => {
     btn.addEventListener ("click", function() {
         calcDisplayQueue.push(btn.innerText || btn.textContent);
         console.log(calcDisplayQueue);
     })
 });
+
+Array.from(calculatorOperations).forEach(btn => {
+    btn.addEventListener ("click", function() {
+        calcDisplayQueue.push(btn.innerText || btn.textContent);
+        console.log(calcDisplayQueue)
+        setOperations(false);
+        // When you have clicked on an operation, all ops except minus need to be
+        // disabled from clicking on them until a number is pressed.
+    })
+})
 
 calculatorEquals.addEventListener("click", function() {
     operate(calcDisplayQueue);
@@ -45,6 +56,18 @@ calculatorDel.addEventListener("click", function() {
     calcDisplayQueue.pop();
     console.log(calcDisplayQueue);
 })
+
+/**
+ * Enables or disables the clickability of +, x, ÷ once any operation is clicked
+ * @param {*} state The state, on or off, that the buttons should be switched to
+ */
+function setOperations(state) {
+    Array.from(calculatorOperations).forEach(operation => {
+        if (operation.innerText != "-") {
+            operation.disabled = !state;
+        }
+    })
+}
 
 //TODO
 function operate(calcDisplayQueue) {

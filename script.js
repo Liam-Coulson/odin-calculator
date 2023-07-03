@@ -22,7 +22,7 @@ class Calculator {
             if (b == 0) {return undefined;}
             return a / b;
         };
-    }   
+    }
 };
 
 var calcDisplayQueue = [];
@@ -71,11 +71,39 @@ function setOperations(state) {
 //TODO
 function operate(calcDisplayQueue) {
     let operand1 = getOperand(calcDisplayQueue);
-    let operator = calcDisplayQueue.shift();
-    let operand2 = getOperand(calcDisplayQueue);
-    console.log("operand 1 " + operand1);
-    console.log("operator " + operator);
-    console.log("operand 2 " + operand2);
+
+    while (calcDisplayQueue.length > 0) {
+        let operator = calcDisplayQueue.shift();
+        let operand2 = getOperand(calcDisplayQueue);
+        // console.log("operand 1 " + operand1);
+        // console.log("operator " + operator);
+        // console.log("operand 2 " + operand2);
+        if (operand1 == ERROR || operand2 == ERROR) {
+            console.log("Incorrect format for numbers given");
+            // PREVENT the rest of the operate function from being carried out
+        }
+        if (operator == "+") {
+            operand1 = CalculatorInstance.add(operand1, operand2);
+            operator = ""
+            operand2 = "";
+        } else if (operator == "-") {
+            operand1 = CalculatorInstance.subtract(operand1, operand2);
+            operator = ""
+            operand2 = "";
+        } else if (operator == "x") {
+            operand1 = CalculatorInstance.multiply(operand1, operand2);
+            operator = ""
+            operand2 = "";
+        } else if (operator == "÷") {
+            operand1 = CalculatorInstance.divide(operand1, operand2);
+            operator = ""
+            operand2 = "";
+        } else {
+            console.log("Something went wrong with your operator.")
+        }
+    }
+    console.log(operand1);
+    return operand1;
 }
 
 function getOperand(calcDisplayQueue) {
@@ -104,9 +132,10 @@ function getOperand(calcDisplayQueue) {
         return Number(operand);
     } else {
         return ERROR;
-    }  
+    }
 }
 
+let CalculatorInstance = new Calculator();
 
 var operand1 = 0
 var operand2 = 0

@@ -40,7 +40,6 @@ Array.from(calculatorOperations).forEach(btn => {
     btn.addEventListener ("click", function() {
         calcDisplayQueue.push(btn.innerText || btn.textContent);
         console.log(calcDisplayQueue)
-        setOperations(false);
         // When you have clicked on an operation, all ops except minus need to be
         // disabled from clicking on them until a number is pressed.
     })
@@ -56,18 +55,6 @@ calculatorDel.addEventListener("click", function() {
     // console.log(calcDisplayQueue);
 })
 
-/**
- * Enables or disables the clickability of +, x, ÷ once any operation is clicked
- * @param {*} state The state, on or off, that the buttons should be switched to
- */
-function setOperations(state) {
-    Array.from(calculatorOperations).forEach(operation => {
-        if (operation.innerText != "-") {
-            operation.disabled = !state;
-        }
-    })
-}
-
 //TODO
 function operate(calcDisplayQueue) {
     let operand1 = getOperand(calcDisplayQueue);
@@ -80,6 +67,7 @@ function operate(calcDisplayQueue) {
         // console.log("operand 2 " + operand2);
         if (operand1 == ERROR || operand2 == ERROR) {
             console.log("Incorrect format for numbers given");
+            break
             // PREVENT the rest of the operate function from being carried out
         }
         if (operator == "+") {

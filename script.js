@@ -25,8 +25,6 @@ class Calculator {
 };
 
 var calcDisplayQueue = [];
-//var operands = [];
-//var operators = [];
 
 // Events
 
@@ -49,12 +47,12 @@ Array.from(calculatorOperations).forEach(btn => {
 
 calculatorEquals.addEventListener("click", function() {
     operate(calcDisplayQueue);
-    console.log(calcDisplayQueue);
+    // console.log(calcDisplayQueue);
 })
 
 calculatorDel.addEventListener("click", function() {
     calcDisplayQueue.pop();
-    console.log(calcDisplayQueue);
+    // console.log(calcDisplayQueue);
 })
 
 /**
@@ -71,81 +69,40 @@ function setOperations(state) {
 
 //TODO
 function operate(calcDisplayQueue) {
-    let previousInput = "";
-    let currentConcatenation = "";
-    let newCalcDisplayQueue = [];
-    let operatorList = [];
-    let operandList = [];
+    let operand1 = getOperand(calcDisplayQueue);
+    let operator = calcDisplayQueue.shift();
+    let operand2 = getOperand(calcDisplayQueue);
 
-    calcDisplayQueue.forEach(input => {
-        if (isNumberlike(input)) {
-            if (isNumberlike(previousInput) || previousInput == "") {
-                currentConcatenation += input;
-                previousInput = input;
-            }
-        } else {
-            if (currentConcatenation != "") {
-                newCalcDisplayQueue.push(currentConcatenation);
-                operandList.push(currentConcatenation);
-                currentConcatenation = "";
-            }
-            newCalcDisplayQueue.push(input);
-            operatorList.push(input);
-            previousInput = input;
-        }
-    })
+    op2List.push(calcDisplayQueue.shift());
+    while (calcDisplayQueue[0] != "+" && calcDisplayQueue[0] != "-"
+        && calcDisplayQueue[0] != "x" && calcDisplayQueue[0] != "÷") {
+        op1List.push(calcDisplayQueue.shift());
+    }
+    console.log(op1List);
+}
+
+function getOperand(calcDisplayQueue) {
+    let oplist = [];
+    if (calcDisplayQueue.length == 0) {
+        return ERROR;
+    } else {
+        oplist.push(calcDisplayQueue.shift());
+    }
     
-    if (currentConcatenation != "") {
-        newCalcDisplayQueue.push(currentConcatenation);
-        operandList.push(currentConcatenation);
-    }
-
-    // Number inputs have now been pieced back together, e.g. ["2", ".", "5"] -> "2.5"
-    calcDisplayQueue = newCalcDisplayQueue;
-
-    operandList.forEach(number => {
-        // checks if the numbers are of the form "digits (decimal?) digits"
-        if(!isNumberlike(number)) {return ERROR}
-    })
-
-    while (operatorList.includes("÷")) {
-        opIndex = calcDisplayQueue.findIndex("÷");
-        preOpIndex = opIndex - 1;
-        prepreOpIndex = opIndex - 2;
-        postOpIndex = opIndex + 1;
-        postpostOpIndex = opIndex + 2;
-
-        if (preOpIndex < 0 || postOpIndex > calcDisplayQueue.length) {return ERROR}
-        if (prepreOpIndex < 0) {prepreOpIndex = -1}
-        if (postpostOpIndex > calcDisplayQueue.length) {postpostOpIndex = -1}
-        
-        if (isNumberlike(calcDisplayQueue[preOpIndex])) {
-            if (isNumberlike(calcDisplayQueue[postOpIndex])) {
-                // SUCCESS
-                Test.divide(parseInt(calcDisplayQueue[preOpIndex],
-                            parseInt(calcDisplayQueue[postOpIndex])))
+    if (calcDisplayQueue.length != 0) {
+        while (calcDisplayQueue[0] != "+" && calcDisplayQueue[0] != "-"
+        && calcDisplayQueue[0] != "x" && calcDisplayQueue[0] != "÷") {
+            op1List.push(calcDisplayQueue.shift());
+            if (calcDisplayQueue.length != 0) {
+                break;
             }
-            else if (calcDisplayQueue[postOpIndex] == "-"
-            && postpostOpIndex != -1) {
-                if (isNumberlike(calcDisplayQueue[postpostOpIndex])) {
-                    // SUCCESS
-                    Test.divide(parseInt(calcDisplayQueue[preOpIndex]),
-                                parseInt("-"+calcDisplayQueue[postOpIndex]))
-                } else {return ERROR}
-            } else {return ERROR}
-        } else {return ERROR}
+        }
     }
+    console.log(oplist)
+    
+    
+}
 
-}
-/**
- * Returns true if the string passed is a number with or without a decimal point
- * @param {string} num  A single character or longer number
- * @returns {boolean}   
- */
-function isNumberlike(num) {
-    if (length(num) == 1) {return (num >= "0" && num <= "9" || num == ".");}
-    else {return num.match(/^\\d*\\.?\\d*$/)}
-}
 
 var operand1 = 0
 var operand2 = 0
@@ -159,3 +116,4 @@ console.log(Test.add(2, 3));
 console.log(Test.subtract(2, 3));
 console.log(Test.multiply(2, 3));
 console.log(Test.divide(2, 3));
+

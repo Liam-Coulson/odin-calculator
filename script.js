@@ -72,33 +72,34 @@ function operate(calcDisplayQueue) {
     let operand1 = getOperand(calcDisplayQueue);
     let operator = calcDisplayQueue.shift();
     let operand2 = getOperand(calcDisplayQueue);
-
-    op2List.push(calcDisplayQueue.shift());
-    while (calcDisplayQueue[0] != "+" && calcDisplayQueue[0] != "-"
-        && calcDisplayQueue[0] != "x" && calcDisplayQueue[0] != "÷") {
-        op1List.push(calcDisplayQueue.shift());
-    }
-    console.log(op1List);
+    console.log("operand 1 " + operand1);
+    console.log("operator " + operator);
+    console.log("operand 2 " + operand2);
 }
 
 function getOperand(calcDisplayQueue) {
-    let oplist = [];
+    let opList = [];
+    let operand = "";
     if (calcDisplayQueue.length == 0) {
         return ERROR;
     } else {
-        oplist.push(calcDisplayQueue.shift());
+        opList.push(calcDisplayQueue.shift());
     }
     
     if (calcDisplayQueue.length != 0) {
         while (calcDisplayQueue[0] != "+" && calcDisplayQueue[0] != "-"
         && calcDisplayQueue[0] != "x" && calcDisplayQueue[0] != "÷") {
-            op1List.push(calcDisplayQueue.shift());
-            if (calcDisplayQueue.length != 0) {
+            opList.push(calcDisplayQueue.shift());
+            if (calcDisplayQueue.length == 0) {
                 break;
             }
         }
     }
-    console.log(oplist)
+    opList.forEach(character => {
+        operand += character;
+    })
+
+    return operand;
     
     
 }
@@ -117,3 +118,4 @@ console.log(Test.subtract(2, 3));
 console.log(Test.multiply(2, 3));
 console.log(Test.divide(2, 3));
 
+getOperand(['7', '8', '+', '3', '2']);

@@ -5,6 +5,7 @@ const calculatorOperations = document.getElementsByClassName("calcOp");
 const calculatorEquals = document.getElementById("calcEquals");
 const calculatorDel = document.getElementById("calcDel");
 const ERROR = "ERROR";
+const operandRegex = /^((\-?[1-9][0-9]*)|(0))$/;
 
 class Calculator {
     constructor() {
@@ -98,10 +99,12 @@ function getOperand(calcDisplayQueue) {
     opList.forEach(character => {
         operand += character;
     })
-
-    return operand;
     
-    
+    if (operand.match(operandRegex)) {
+        return Number(operand);
+    } else {
+        return ERROR;
+    }  
 }
 
 

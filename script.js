@@ -49,7 +49,7 @@ Array.from(calculatorOperations).forEach(btn => {
 
 calculatorEquals.addEventListener("click", function() {
     result = operate(calcDisplayQueue);
-    calcDisplayQueue = [result];
+    calcDisplayQueue = [result.toString()];
     updateDisplay(calcDisplayQueue);
     if (calcDisplayQueue[0] == ERROR) {
         calcDisplayQueue = [];
@@ -102,12 +102,12 @@ function operate(calcDisplayQueue) {
             console.log("Something went wrong with your operator.")
         }
     }
-    if (ans != ERROR) {
-        ans = operand1;
-        return ans;
-    } else {
+    if (operand1 == ERROR || operand2 == ERROR) {
         ans = 0;
         return ERROR;
+    } else {
+        ans = operand1;
+        return ans;
     }
 }
 

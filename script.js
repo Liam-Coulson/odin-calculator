@@ -7,6 +7,7 @@ const calculatorDel = document.getElementById("calcDel");
 const calculatorAC = document.getElementById("calcAC");
 const calculatorAns = document.getElementById("calcAns");
 const ERROR = "ERROR";
+const ZERO = "You broke the calculator!";
 const operandRegex = /^((\-?[1-9][0-9]*)|(0))$/;
 let ans = 0;
 
@@ -47,11 +48,16 @@ Array.from(calculatorOperations).forEach(btn => {
     })
 })
 
+calculatorAns.addEventListener("click", function() {
+    calcDisplayQueue.push(ans);
+    updateDisplay(calcDisplayQueue);
+})
+
 calculatorEquals.addEventListener("click", function() {
     result = operate(calcDisplayQueue);
     calcDisplayQueue = [result.toString()];
     updateDisplay(calcDisplayQueue);
-    if (calcDisplayQueue[0] == ERROR) {
+    if (calcDisplayQueue[0] == ERROR || calcDisplayQueue[0] == ZERO) {
         calcDisplayQueue = [];
     }
 })
@@ -96,6 +102,10 @@ function operate(calcDisplayQueue) {
             operand2 = "";
         } else if (operator == "÷") {
             operand1 = CalculatorInstance.divide(operand1, operand2);
+            if (operand1 == undefined) {
+                operand1 = ZERO;
+                calcDisplayQueue = [];
+            }
             operator = ""
             operand2 = "";
         } else {
@@ -103,8 +113,9 @@ function operate(calcDisplayQueue) {
         }
     }
     if (operand1 == ERROR || operand2 == ERROR) {
-        ans = 0;
         return ERROR;
+    } else if (operand1 == ZERO) {
+        return ZERO;
     } else {
         ans = operand1;
         return ans;

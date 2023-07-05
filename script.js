@@ -4,8 +4,11 @@ const calculatorNumbers = document.getElementsByClassName("calcNum");
 const calculatorOperations = document.getElementsByClassName("calcOp");
 const calculatorEquals = document.getElementById("calcEquals");
 const calculatorDel = document.getElementById("calcDel");
+const calculatorAC = document.getElementById("calcAC");
+const calculatorAns = document.getElementById("calcAns");
 const ERROR = "ERROR";
 const operandRegex = /^((\-?[1-9][0-9]*)|(0))$/;
+let ans = 0;
 
 class Calculator {
     constructor() {
@@ -33,29 +36,37 @@ Array.from(calculatorNumbers).forEach(btn => {
     btn.addEventListener ("click", function() {
         calcDisplayQueue.push(btn.innerText || btn.textContent);
         console.log(calcDisplayQueue);
+        updateDisplay(calcDisplayQueue);
     })
 });
 
 Array.from(calculatorOperations).forEach(btn => {
     btn.addEventListener ("click", function() {
         calcDisplayQueue.push(btn.innerText || btn.textContent);
-        console.log(calcDisplayQueue)
-        // When you have clicked on an operation, all ops except minus need to be
-        // disabled from clicking on them until a number is pressed.
+        updateDisplay(calcDisplayQueue);
     })
 })
 
 calculatorEquals.addEventListener("click", function() {
-    operate(calcDisplayQueue);
-    // console.log(calcDisplayQueue);
+    result = operate(calcDisplayQueue);
+    calcDisplayQueue = [result];
+    updateDisplay(calcDisplayQueue);
+    if (calcDisplayQueue[0] == ERROR) {
+        calcDisplayQueue = [];
+    }
 })
 
 calculatorDel.addEventListener("click", function() {
     calcDisplayQueue.pop();
-    // console.log(calcDisplayQueue);
+    updateDisplay(calcDisplayQueue);
 })
 
-//TODO
+calculatorAC.addEventListener("click", function() {
+    calcDisplayQueue = [];
+    updateDisplay(calcDisplayQueue);
+})
+
+
 function operate(calcDisplayQueue) {
     let operand1 = getOperand(calcDisplayQueue);
 
@@ -67,6 +78,7 @@ function operate(calcDisplayQueue) {
         // console.log("operand 2 " + operand2);
         if (operand1 == ERROR || operand2 == ERROR) {
             console.log("Incorrect format for numbers given");
+            ans = ERROR;
             break
             // PREVENT the rest of the operate function from being carried out
         }
@@ -90,8 +102,13 @@ function operate(calcDisplayQueue) {
             console.log("Something went wrong with your operator.")
         }
     }
-    console.log(operand1);
-    return operand1;
+    if (ans != ERROR) {
+        ans = operand1;
+        return ans;
+    } else {
+        ans = 0;
+        return ERROR;
+    }
 }
 
 function getOperand(calcDisplayQueue) {
@@ -121,6 +138,14 @@ function getOperand(calcDisplayQueue) {
     } else {
         return ERROR;
     }
+}
+
+function updateDisplay(calcDisplayQueue) {
+    let string = ""
+    calcDisplayQueue.forEach(character => {
+        string += character;
+    })
+    calculatorDisplay.innerHTML = string;
 }
 
 let CalculatorInstance = new Calculator();

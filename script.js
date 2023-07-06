@@ -9,6 +9,8 @@ const calculatorAns = document.getElementById("calcAns");
 const ERROR = "ERROR";
 const ZERO = "You broke the calculator!";
 const operandRegex = /^((\-?[1-9][0-9]*(\.[0-9]+)?)|(0(\.[0-9]+)?)|(\-0\.[0-9]*[1-9][0-9]*))$/;
+const validKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+                     "-", "+", "."]
 let ans = 0;
 
 class Calculator {
@@ -34,19 +36,17 @@ var calcDisplayQueue = [];
 // Events
 
 Array.from(calculatorNumbers).forEach(btn => {
-    btn.addEventListener ("click", function() {
-        calcDisplayQueue.push(btn.innerText || btn.textContent);
-        console.log(calcDisplayQueue);
-        updateDisplay(calcDisplayQueue);
-    })
+    btn.addEventListener ("click", function() {pressNumOrOperation(btn.innerHTML)})
 });
 
 Array.from(calculatorOperations).forEach(btn => {
-    btn.addEventListener ("click", function() {
-        calcDisplayQueue.push(btn.innerText || btn.textContent);
-        updateDisplay(calcDisplayQueue);
-    })
+    btn.addEventListener ("click", function() {pressNumOrOperation(btn.innerHTML)})
 })
+
+function pressNumOrOperation(text) {
+    calcDisplayQueue.push(text);
+    updateDisplay(calcDisplayQueue);
+}
 
 calculatorAns.addEventListener("click", function() {
     for (let i = 0; i < ans.toString().length; i++) {
@@ -55,26 +55,54 @@ calculatorAns.addEventListener("click", function() {
     updateDisplay(calcDisplayQueue);
 })
 
-calculatorEquals.addEventListener("click", function() {
+calculatorEquals.addEventListener("click", function() {pressEquals()})
+
+function pressEquals() {
     result = operate(calcDisplayQueue);
     calcDisplayQueue = [result.toString()];
     updateDisplay(calcDisplayQueue);
     if (calcDisplayQueue[0] == ERROR || calcDisplayQueue[0] == ZERO) {
         calcDisplayQueue = [];
+        ans = 0;
     } else if (calcDisplayQueue[0][0] == "-") {
         calcDisplayQueue = ["-", calcDisplayQueue[0].slice(1)];
     }
-})
+}
 
-calculatorDel.addEventListener("click", function() {
+calculatorDel.addEventListener("click", function() {pressDel()})
+
+function pressDel() {
     calcDisplayQueue.pop();
     updateDisplay(calcDisplayQueue);
-})
+}
 
 calculatorAC.addEventListener("click", function() {
     calcDisplayQueue = [];
     ans = 0;
     updateDisplay(calcDisplayQueue);
+})
+
+// Key press events
+
+document.addEventListener("keydown", (event) => {
+    let name = event.key;
+    console.log(name);
+    console.log(typeof name);
+    let code = event.code;
+    if (validKeys.includes(name)) {
+        console.log(name);
+        console.log(typeof name);
+        pressNumOrOperation(name);
+    } else if (name == "*") {
+        pressNumOrOperation("x");
+    } else if (name == "/") {
+        pressNumOrOperation("÷");
+    } else if (name == "=") {
+        pressEquals()
+    } else if (name == "Backspace") {
+        pressDel();
+    }
+    console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
 })
 
 
@@ -117,7 +145,7 @@ function operate(calcDisplayQueue) {
             console.log("Something went wrong with your operator.")
         }
     }
-    if (operand1 == ERROR || operand2 == ERROR) {
+    if (ans == ERROR || operand1 == ERROR) {
         return ERROR;
     } else if (operand1 == ZERO) {
         return ZERO;

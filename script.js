@@ -117,7 +117,7 @@ function operate(calcDisplayQueue) {
     } else if (operand1 == ZERO) {
         return ZERO;
     } else {
-        ans = operand1;
+        ans = Math.round(operand1*1000000)/1000000; // Round to 6 dp.
         return ans;
     }
 }

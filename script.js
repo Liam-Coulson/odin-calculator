@@ -49,7 +49,9 @@ Array.from(calculatorOperations).forEach(btn => {
 })
 
 calculatorAns.addEventListener("click", function() {
-    calcDisplayQueue.push(ans);
+    for (let i = 0; i < ans.toString().length; i++) {
+        calcDisplayQueue.push(ans.toString()[i]);
+    }
     updateDisplay(calcDisplayQueue);
 })
 
@@ -59,6 +61,8 @@ calculatorEquals.addEventListener("click", function() {
     updateDisplay(calcDisplayQueue);
     if (calcDisplayQueue[0] == ERROR || calcDisplayQueue[0] == ZERO) {
         calcDisplayQueue = [];
+    } else if (calcDisplayQueue[0][0] == "-") {
+        calcDisplayQueue = ["-", calcDisplayQueue[0].slice(1)];
     }
 })
 

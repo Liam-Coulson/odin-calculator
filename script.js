@@ -161,7 +161,15 @@ function updateDisplay(calcDisplayQueue) {
     calcDisplayQueue.forEach(character => {
         string += character;
     })
+    if (string.length >= 12 && string.length < 16) {
+        calculatorDisplay.style.fontSize = "28px";
+    } else if (string.length >= 16) {
+        calculatorDisplay.style.fontSize = "20px";
+    } else {
+        calculatorDisplay.style.fontSize = "36px";
+    }
     calculatorDisplay.innerHTML = string;
+    console.log("font size: ", calculatorDisplay.style.fontSize);
 }
 
 let CalculatorInstance = new Calculator();

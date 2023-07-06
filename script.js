@@ -69,6 +69,7 @@ calculatorDel.addEventListener("click", function() {
 
 calculatorAC.addEventListener("click", function() {
     calcDisplayQueue = [];
+    ans = 0;
     updateDisplay(calcDisplayQueue);
 })
 

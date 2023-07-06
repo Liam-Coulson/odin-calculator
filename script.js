@@ -8,7 +8,7 @@ const calculatorAC = document.getElementById("calcAC");
 const calculatorAns = document.getElementById("calcAns");
 const ERROR = "ERROR";
 const ZERO = "You broke the calculator!";
-const operandRegex = /^((\-?[1-9][0-9]*)|(0))$/;
+const operandRegex = /^((\-?[1-9][0-9]*(\.[0-9]+)?)|(0(\.[0-9]+)?)|(\-0\.[0-9]*[1-9][0-9]*))$/;
 let ans = 0;
 
 class Calculator {
